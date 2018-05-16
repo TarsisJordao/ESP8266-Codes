@@ -9,7 +9,9 @@ boolean valGPIO5, valGPIO4, valGPIO12, valGPIO13, valGPIO16, valGPIO14;
 
 unsigned int contGPIO5=0, contGPIO4=0, contGPIO12=0, contGPIO13=0, contGPIO16=0, contGPIO14=0;
 
-unsigned long int tempoChecagem;
+unsigned long int previusMillis=0;
+
+unsigned int tempoCiclo=4000;
 
 void setup() 
 {
@@ -25,11 +27,9 @@ void setup()
 
 void loop() 
 { 
-  tempoChecagem=millis();
+  unsigned long int currentMillis=millis();
 
-  Serial.println(millis()-tempoChecagem);
-
-  while(millis()-tempoChecagem < 4000)
+  if(currentMillis - previusMillis < tempoCiclo)
   {
       valGPIO5 = digitalRead(GPIO5);
       
@@ -59,9 +59,9 @@ void loop()
       valGPIO14 = digitalRead(GPIO14);
       if(valGPIO14==0)
         contGPIO14++;
+        
+  previusMillis=currentMillis;
   }
-
-  Serial.println(millis()-tempoChecagem);
           
   escreveValorSaidas();
 
@@ -106,4 +106,3 @@ void escreveNumPulsos()
   Serial.println(contGPIO14);
   Serial.println();
 }
-
